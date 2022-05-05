@@ -3,7 +3,23 @@ services:
   api:
     build: .
     ports:
-    - "8080:8080"
+      - "8080:8080"
+    environment:
+      DATASOURCE_URL: jdbc:postgresql://db:5432/springboot-exampledb
+      DATASOURCE_USERNAME: username
+      DATASOURCE_PASSWORD: password
+    depends_on:
+      - db
   test:
     build: .
     command: ./gradlew test
+    depends_on:
+      - db
+  db:
+    image: postgres
+    # volumes:
+    #   - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=springboot-exampledb
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
